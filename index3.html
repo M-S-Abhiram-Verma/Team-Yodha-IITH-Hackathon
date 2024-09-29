@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Safety System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Vehicle Safety and Hazard Detection System</h1>
+    </header>
+
+    <main>
+        <section class="dashboard">
+            <h2>Dashboard</h2>
+            <div class="speed-monitor">
+                <h3>Current Speed</h3>
+                <div class="speed-display" id="speedDisplay">70 km/h</div>
+                <div class="speed-alert" id="speedAlert">Safe Speed</div>
+            </div>
+
+            <div class="map-container">
+                <h3>Map View</h3>
+                <!-- Placeholder for map -->
+                <div class="map-placeholder">Map will be displayed here.</div>
+            </div>
+
+            <div class="hazard-alerts">
+                <h3>Hazard Alerts</h3>
+                <ul id="hazardList">
+                    <li>Pothole detected 200m ahead!</li>
+                    <li>Manhole detected 150m ahead!</li>
+                </ul>
+            </div>
+
+            <button id="emergencyButton">Call Emergency Services</button>
+        </section>
+
+        <aside class="settings">
+            <h2>Settings</h2>
+            <form id="settingsForm">
+                <label for="speedLimit">Set Speed Limit:</label>
+                <input type="number" id="speedLimit" placeholder="Enter speed in km/h">
+
+                <label for="emergencyContact">Emergency Contact:</label>
+                <input type="text" id="emergencyContact" placeholder="Enter contact number">
+
+                <button type="submit">Save Settings</button>
+            </form>
+        </aside>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Vehicle Safety System. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

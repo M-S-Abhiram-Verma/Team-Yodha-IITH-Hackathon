@@ -1,0 +1,86 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    padding: 20px;
+}
+
+.dashboard {
+    flex: 3;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+.settings {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.speed-monitor {
+    text-align: center;
+}
+
+.speed-display {
+    font-size: 2rem;
+    color: #28a745; /* Green color */
+}
+
+.speed-alert {
+    font-size: 1.2rem;
+}
+
+.map-container {
+    height: 200px;
+    background-color: #e9ecef; /* Light gray */
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hazard-alerts {
+    margin-top: 20px;
+}
+
+.hazard-alerts ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+button {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #c82333; /* Darker red */
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+}

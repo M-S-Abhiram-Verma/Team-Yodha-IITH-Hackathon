@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page</title>
+    <link rel="stylesheet" href="create.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account</h1>
+        <form id="accountForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+
+            <label for="mobile">Mobile Number:</label>
+            <input type="tel" id="mobile" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" required>
+
+            <div id="carSection">
+                <h2>Cars</h2>
+                <div id="carList"></div>
+                <button type="button" id="addCarButton">Add Car</button>
+            </div>
+
+            <button type="submit">Create Account</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

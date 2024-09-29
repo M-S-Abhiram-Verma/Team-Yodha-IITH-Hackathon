@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Safety and Hazard Detection System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        header { background-color: #007bff; color: white; padding: 1rem; text-align: center; }
+        main { display: flex; padding: 20px; }
+        .dashboard { flex: 3; background-color: white; padding: 20px; border-radius: 8px; margin-right: 20px; }
+        .settings { flex: 1; background-color: white; padding: 20px; border-radius: 8px; }
+        .speed-display { font-size: 20px; margin-top: 10px; }
+        #map { height: 400px; margin-top: 20px; }
+        button { background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #c82333; }
+        footer { text-align: center; padding: 10px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vehicle Safety and Hazard Detection System</h1>
+    </header>
+
+    <main>
+        <section class="dashboard">
+            <h2>Dashboard</h2>
+            <div class="speed-monitor">
+                <h3>Current Speed</h3>
+                <div class="speed-display">Current Speed: <span id="currentSpeed">0</span> km/h</div>
+            </div>
+
+            <div class="controls">
+                <button id="trackBtn">Track Vehicle</button>
+                <button id="reportPotholeBtn">Report Pothole</button>
+            </div>
+
+            <div id="map"></div>
+
+            <div class="hazard-alerts">
+                <h3>Hazard Alerts</h3>
+                <ul id="hazardList">
+                    <li>Pothole detected 200m ahead!</li>
+                    <li>Manhole detected 150m ahead!</li>
+                </ul>
+            </div>
+
+            <button id="emergencyButton">Call Emergency Services</button>
+        </section>
+
+        <aside class="settings">
+            <h2>Settings</h2>
+            <form id="settingsForm">
+                <label for="speedLimit">Set Speed Limit:</label>
+                <input type="number" id="speedLimit" placeholder="Enter speed in km/h">
+
+                <label for="emergencyContact">Emergency Contact:</label>
+                <input type="text" id="emergencyContact" placeholder="Enter contact number">
+
+                <button type="submit">Save Settings</button>
+            </form>
+        </aside>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Vehicle Safety System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize the map and set view to Hyderabad
+        var map = L.map('map').setView([17.385044, 78.486671], 13);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Define start and destination coordinates
+        var startCoordinates = [17.385044, 78.486671]; // Starting point (e.g., your location)
+        var destinationCoordinates = [17.394331, 78.398568]; // Destination (e.g., Khairatabad)
+        
+        // Markers for start and destination
+        var startMarker = L.marker(startCoordinates).addTo(map).bindPopup('Start Point').openPopup();
+        var destinationMarker = L.marker(destinationCoordinates).addTo(map).bindPopup('Destination Point').openPopup();
+        
+        // Draw a route between start and destination
+        var routeLine = L.polyline([startCoordinates, destinationCoordinates], { color: 'blue' }).addTo(map);
+        map.fitBounds(routeLine.getBounds());
+
+        // Fetch user location and update start point
+        document.getElementById('trackBtn').addEventListener('click', function() {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var userLat = position.coords.latitude;
+                var userLon = position.coords.longitude;
+
+                // Update start point marker
+                startMarker.setLatLng([userLat, userLon]);
+                map.setView([userLat, userLon], 13);
+
+                // Simulate moving the vehicle along the route
+                simulateVehicleMovement(userLat, userLon);
+            });
+        });
+
+        // Function to simulate vehicle movement along the route based on random speed
+        function simulateVehicleMovement(startLat, startLon) {
+            var vehicleMarker = L.marker([startLat, startLon]).addTo(map).bindPopup('Vehicle').openPopup();
+            var distance = getDistance(startCoordinates, destinationCoordinates); // Get distance in km
+            var steps = 100; // Number of steps to reach destination
+            var latStep = (destinationCoordinates[0] - startLat) / steps; // Latitude step
+            var lonStep = (destinationCoordinates[1] - startLon) / steps; // Longitude step
+
+            var currentStep = 0; // Current step counter
+            
+            var interval = setInterval(function() {
+                if (currentStep < steps) {
+                    // Generate a random speed between 20 and 100 km/h
+                    var speed = Math.floor(Math.random() * (100 - 20 + 1)) + 20;
+                    
+                    // Update the speed display
+                    document.getElementById('currentSpeed').textContent = speed;
+
+                    // Update the vehicle's position
+                    startLat += latStep;
+                    startLon += lonStep;
+                    vehicleMarker.setLatLng([startLat, startLon]);
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    alert("Arrived at destination!");
+                }
+            }, 1000); // Update every second
+        }
+
+        // Function to calculate distance in km between two points using Haversine formula
+        function getDistance(coords1, coords2) {
+            var R = 6371; // Radius of the Earth in km
+            var dLat = (coords2[0] - coords1[0]) * Math.PI / 180;
+            var dLon = (coords2[1] - coords1[1]) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(coords1[0] * Math.PI / 180) * Math.cos(coords2[0] * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            var distance = R * c; // Distance in km
+            return distance;
+        }
+
+        // Handle pothole reporting
+        document.getElementById('reportPotholeBtn').addEventListener('click', function() {
+            alert("Pothole reported!");
+        });
+    </script>
+</body>
+</html>
